@@ -8,34 +8,70 @@ const PostShow = (props) => {
     const [name, setName] = useState("")
     const [comments, setComment] = useState([])
     useEffect(() => {
-        axios.get(`https://jsonplaceholder.typicode.com/posts?id=${id}`)
-        .then((response) => {
-            const result = response.data[0]
-            console.log(response.data)
-            setUserPost(result)
-        }) 
-        .catch((err) => {
-            alert(err.message)
+        // axios.get(`https://jsonplaceholder.typicode.com/posts?id=${id}`)
+        // .then((response) => {
+        //     const result = response.data[0]
+        //     //console.log(response.data)
+        //     setUserPost(result)
+        // }) 
+        // .catch((err) => {
+        //     alert(err.message)
+        // })
+        // axios.get(`https://jsonplaceholder.typicode.com/comments?postId=${id}`)
+        // .then((response) => {
+        //     const result = response.data
+        //     setComment(result)
+        // })
+        // .catch((err) => {
+        //     alert(err.message)
+        // })
+        fetch(`https://jsonplaceholder.typicode.com/posts?id=${id}`, {
+            method: 'GET'
         })
-        axios.get(`https://jsonplaceholder.typicode.com/comments?postId=${id}`)
-        .then((response) => {
-            const result = response.data
+        .then(response => response.json())
+        .then(result => {
+            console.log('Success post:', result);
+            setUserPost(result[0])
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert(error.msg)
+        })
+        fetch(`https://jsonplaceholder.typicode.com/comments?postId=${id}`, {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(result => {
+            console.log('Success:', result);
             setComment(result)
         })
-        .catch((err) => {
-            alert(err.message)
+        .catch(error => {
+            console.error('Error:', error);
+            alert(error.msg)
         })
     }, [id])
     useEffect(() => {
         if (userPost.userId) {
-            axios.get(`https://jsonplaceholder.typicode.com/users/${userPost.userId}`)
-            .then((response) => {
-                const result = response.data.name
-                console.log(result)
-                setName(result)
+            // axios.get(`https://jsonplaceholder.typicode.com/users/${userPost.userId}`)
+            // .then((response) => {
+            //     const result = response.data.name
+            //     //console.log(result)
+            //     setName(result)
+            // })
+            // .catch((err) => {
+            //   alert(err.message)
+            // })
+            fetch(`https://jsonplaceholder.typicode.com/users/${userPost.userId}`, {
+                method: 'GET'
             })
-            .catch((err) => {
-              alert(err.message)
+            .then(response => response.json())
+            .then(result => {
+                console.log('Success username:', result);
+                setName(result.name)
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(error.msg)
             })
         }
     }, [userPost.userId])
